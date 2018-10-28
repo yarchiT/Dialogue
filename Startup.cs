@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialogue.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,7 +32,17 @@ namespace Dialogue
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+        // for session
+            services.AddDistributedMemoryCache();
 
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+            });
+
+            services.AddScoped<IChatService, ChatService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -51,6 +62,7 @@ namespace Dialogue
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+             app.UseSession();
 
             app.UseMvc(routes =>
             {

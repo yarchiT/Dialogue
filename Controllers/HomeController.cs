@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Dialogue.Models;
 using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace Dialogue.Controllers
 {
@@ -13,42 +14,27 @@ namespace Dialogue.Controllers
     {
         public ActionResult Index()
         {
-            return View("~/Views/Login.cshtml");
+            if(HttpContext.Session.GetString("useName") != null){
+                 return View("~/Views/Chat.cshtml");
+            }else{
+                return View("~/Views/Login.cshtml");
+            }
+        }
+
+        [HttpGet]
+		public ActionResult Login()
+		{
+            return Index();
         }
 
         [HttpPost]
 		public ActionResult Login(string username)
 		{
             ViewBag.CurrentUserName = username;
-            return View("~/Views/Chat.cshtml");
+            HttpContext.Session.SetString("useName", username);
+            return Index();
         }
         
-        [HttpPost]
-		public JsonResult HandleMessage(string message)
-		{
-            
-            return Json(new {result = "Recieved " + message});
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
