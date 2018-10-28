@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -23,9 +24,24 @@ namespace Dialogue.Services{
 
         private string _introducing = "Yo human! My name is Robozhop,"+
         " I can kick you stupid fat ass right now. Anyways, I can also do some math, just pass me an expression.";
+      
+        //I'm sorry for this
         public string responseToMessage(string message)
         {
-           return "Hi";
+           if(_greatings.Contains(message)){
+               return _introducing;
+           }else if(_endings.Contains(message)){
+               return "Bye bye looser";
+           }else{
+                object answer = null;
+                try{
+                    DataTable dt = new DataTable();
+                    answer = dt.Compute(message,"");
+                }catch(Exception ex){
+                   return "Maybe you say hi first????";
+                }
+                return answer.ToString();
+           }
         }
     }
 }

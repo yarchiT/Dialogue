@@ -15,7 +15,7 @@ namespace Dialogue.Controllers
 		public JsonResult HandleMessage(string message)
 		{
          var response = _chatService.responseToMessage(message);   
-            return Json(new {result = "Recieved " + message});
+            return Json(new {result = response});
         }
 
          [HttpGet]

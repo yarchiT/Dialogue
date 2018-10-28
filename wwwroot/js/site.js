@@ -1,8 +1,6 @@
 ﻿$( "#sendMessage" ).click(function() {
-    var username = $("#userField").text();
     var message = $("#msg_box").val();
-    var messageHtml = "<tr><td>" + username + "</td><td>" + message + "</td></tr>"
-    $('#chatTable tr:last').after(messageHtml);
+    userModule.displayMessage("You", message);
 
     $.ajax({
         type:"POST",
@@ -11,8 +9,26 @@
             message: message
         },
         success: function(data) {
-            alert( "fantastich " + data.result );
+            userModule.displayMessage("Siri", data.result);
+            $("#msg_box").val("");
         },
-        dataType: 'jsonp',
+        error: function(data){
+          console.log(data);
+        },     
       });
   });
+
+  var userModule = (function(){
+
+    function displayMessage(speaker, message){
+        var messageHtml = "<tr><td>" + speaker + "</td><td>" + message + "</td></tr>"
+        $('#chatTable tr:last').after(messageHtml);
+      }
+
+    return{
+        displayMessage: function(speaker, message){
+            displayMessage(speaker, message);
+        }
+    }
+  })();
+  
