@@ -1,0 +1,1 @@
+dotnet ef migrations add $(Get-Date -Format FileDateTime) -c DialogueAppContext -o Data/Migrations
