@@ -22,14 +22,36 @@ namespace Dialogue.Web.Controllers
         [Route(""), HttpPost]
         public IActionResult AddUser([FromBody] UserDto userDto)
         {
-           
+            User user = new User
+            {
+                UserName = userDto.UserName,
+                Password = userDto.Password
+            };
+
+            _db.Users.Add(user);
+            _db.SaveChanges();
+
             return Ok();
         }
+
+        [Route("login"), HttpPost]
+        public IActionResult UserLogin([FromBody] UserDto userDto)
+        {
+            User user = _db.Users.FirstOrDefault(u => u.UserName == userDto.UserName && u.Password == userDto.Password);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok();
+        }
+
 
     }
 
     public class UserDto
     {
-       
+        public string UserName { get; set; }
+
+        public string Password { get; set; }
     }
 }

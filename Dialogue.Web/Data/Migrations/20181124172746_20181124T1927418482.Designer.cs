@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dialogue.Web.Data.Migrations
 {
     [DbContext(typeof(DialogueAppContext))]
-    [Migration("20181124164200_20181124T1841555424")]
-    partial class _20181124T1841555424
+    [Migration("20181124172746_20181124T1927418482")]
+    partial class _20181124T1927418482
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,11 +41,9 @@ namespace Dialogue.Web.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
-
-                    b.Property<string>("Name");
-
                     b.Property<string>("Password");
+
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 

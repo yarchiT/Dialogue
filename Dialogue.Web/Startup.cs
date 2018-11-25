@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Dialogue.Web.Data;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Dialogue.Web
 {
@@ -23,6 +24,11 @@ namespace Dialogue.Web
         {
             services.AddMvc();
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "DialogueService API", Version = "v1" });
+            });
+
             services.AddDbContext<DialogueAppContext>(options => options.UseSqlite("Data Source=dialogue.db"));
         }
 
@@ -33,6 +39,15 @@ namespace Dialogue.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
