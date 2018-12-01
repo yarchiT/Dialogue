@@ -29,20 +29,29 @@ namespace Dialogue.Controllers
         }
 
         [HttpPost]
-		public ActionResult Login(string username, string password)
+		public async Task<IActionResult> Login(string username, string password)
 		{
-            ViewBag.CurrentUserName = username;
-            HttpContext.Session.SetString("useName", username);
-		    var res = ServiceConnector.Login(username, password);
+            
+            
+		    var res = await ServiceConnector.Login(username, password);
+            if (res is OkResult)
+            {
+                ViewBag.CurrentUserName = username;
+                HttpContext.Session.SetString("useName", username);
+            }
             return Index();
         }
 
         [HttpPost]
-        public ActionResult Register(string username, string password)
+        public async Task<IActionResult> Register(string username, string password)
         {
-            ViewBag.CurrentUserName = username;
-            HttpContext.Session.SetString("useName", username);
-            var res = ServiceConnector.Register(username, password);
+            
+            var res = await ServiceConnector.Register(username, password);
+            if (res is OkResult)
+            {
+                ViewBag.CurrentUserName = username;
+                HttpContext.Session.SetString("useName", username);
+            }
             return Index();
         }
 

@@ -12,14 +12,20 @@
         <div class="col-md-5 col-md-offset-4">
           <div class="panel panel-default">
             <div class="panel-body">
-                <form method="post" style="margin:0" autocomplete="off">
+                <form asp-controller="Home" method="post">
                     <div class="form-group">
-                        <input type="text" name="username" id="username" placeholder="Enter Username" class="form-control" required minlength="3" maxlength="15" />
-
-                        <input type="password" name="password" id="password" placeholder="Enter Username" class="form-control" required minlength="3" maxlength="15" />
+                        Username:
+                        <input type="email" data-val="true"
+                                data-val-email="The Email Address field is not a valid email address."
+                                data-val-required="The Email Address field is required."
+                                id="username" name="username" value="" /> <br>
+                        Password:
+                        <input type="password" data-val="true"
+                        data-val-required="The Password field is required."
+                        id="password" name="password" /><br>
                     </div>
-                    <button type="submit" asp-controller = "Home" asp-action = "Login">Login</button> 
-                    <button type="submit" asp-controller = "Home" asp-action = "Register">Register</button>
+                    <button type="submit" formaction="/Home/Login">Login</button> 
+                    <button type="submit" formaction="/Home/Register">Register</button>
                 </form>
             </div>
           </div>

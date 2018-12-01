@@ -25,20 +25,23 @@ namespace Dialogue.Services
             return chat;
         }
 
-        public static async Task<ActionResult> Login(string username, string password)
+        public static async Task<IActionResult> Login(string username, string password)
         {
-            ActionResult res = null;
+            IActionResult res = null;
             var json = JsonConvert.SerializeObject(new {userName = username, password = password});
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync("http://localhost:58707/api/users/login", stringContent);// URRIIIII
             if (response.IsSuccessStatusCode)
             {
-                res = await response.Content.ReadAsAsync<ActionResult>();
+                res = new OkResult();//await response.Content.ReadAsAsync<IActionResult>();
+            }
+            else{
+                res = new NotFoundResult();
             }
             return res;
         }
 
-        public static async Task<ActionResult> Register(string username, string password)
+        public static async Task<IActionResult> Register(string username, string password)
         {
             ActionResult res = null;
             var json = JsonConvert.SerializeObject(new { userName = username, password = password });
@@ -46,7 +49,7 @@ namespace Dialogue.Services
             HttpResponseMessage response = await client.PostAsync("http://localhost:58707/api/users", stringContent);// URRIIIII
             if (response.IsSuccessStatusCode)
             {
-                res = await response.Content.ReadAsAsync<ActionResult>();
+                res = new OkResult();//await response.Content.ReadAsAsync<ActionResult>();
             }
             return res;
         }
