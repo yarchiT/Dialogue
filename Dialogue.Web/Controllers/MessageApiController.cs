@@ -22,7 +22,7 @@ namespace Dialogue.Web.Controllers
         [Route("{userName}"), HttpPost]
         public async Task<IActionResult> AddMessage([FromRoute] string userName, [FromBody] MessageDto messageDto)
         {
-            User user = await _db.Users.FindAsync(1);
+            User user = _db.Users.FirstOrDefault(u => u.UserName == userName);
 
             if (user == null)
                 return NotFound();
@@ -35,7 +35,7 @@ namespace Dialogue.Web.Controllers
                 Text = messageDto.Text
             };
 
-            _db.Messages.Add(message);
+            await _db.Messages.AddAsync(message);
             _db.SaveChanges();
 
             return Ok();

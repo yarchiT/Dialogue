@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Dialogue.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Identity;
+using Dialogue.Web.Models;
 
 namespace Dialogue.Web
 {
@@ -30,6 +32,7 @@ namespace Dialogue.Web
             });
 
             services.AddDbContext<DialogueAppContext>(options => options.UseSqlite("Data Source=dialogue.db"));
+             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
