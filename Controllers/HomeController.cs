@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Dialogue.Models;
 using System.Web;
+using Dialogue.Services;
 using Microsoft.AspNetCore.Http;
 
 namespace Dialogue.Controllers
@@ -28,13 +29,24 @@ namespace Dialogue.Controllers
         }
 
         [HttpPost]
-		public ActionResult Login(string username)
+		public ActionResult Login(string username, string password)
 		{
             ViewBag.CurrentUserName = username;
             HttpContext.Session.SetString("useName", username);
+		    var res = ServiceConnector.Login(username, password);
             return Index();
         }
-        
+
+        [HttpPost]
+        public ActionResult Register(string username, string password)
+        {
+            ViewBag.CurrentUserName = username;
+            HttpContext.Session.SetString("useName", username);
+            var res = ServiceConnector.Register(username, password);
+            return Index();
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

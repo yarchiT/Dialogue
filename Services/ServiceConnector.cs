@@ -28,9 +28,9 @@ namespace Dialogue.Services
         public static async Task<ActionResult> Login(string username, string password)
         {
             ActionResult res = null;
-            var json = JsonConvert.SerializeObject(new {username = username, password = password});
+            var json = JsonConvert.SerializeObject(new {userName = username, password = password});
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync("",stringContent);// URRIIIII
+            HttpResponseMessage response = await client.PostAsync("http://localhost:58707/api/users/login", stringContent);// URRIIIII
             if (response.IsSuccessStatusCode)
             {
                 res = await response.Content.ReadAsAsync<ActionResult>();
@@ -41,9 +41,9 @@ namespace Dialogue.Services
         public static async Task<ActionResult> Register(string username, string password)
         {
             ActionResult res = null;
-            var json = JsonConvert.SerializeObject(new { username = username, password = password });
+            var json = JsonConvert.SerializeObject(new { userName = username, password = password });
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync("", stringContent);// URRIIIII
+            HttpResponseMessage response = await client.PostAsync("http://localhost:58707/api/users", stringContent);// URRIIIII
             if (response.IsSuccessStatusCode)
             {
                 res = await response.Content.ReadAsAsync<ActionResult>();

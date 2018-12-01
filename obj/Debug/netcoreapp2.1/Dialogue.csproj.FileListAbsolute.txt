@@ -84,7 +84,6 @@ D:\Dialogue\bin\Debug\netcoreapp2.1\Dialogue.dll
 D:\Dialogue\bin\Debug\netcoreapp2.1\Dialogue.pdb
 D:\Dialogue\bin\Debug\netcoreapp2.1\Dialogue.Views.dll
 D:\Dialogue\bin\Debug\netcoreapp2.1\Dialogue.Views.pdb
-D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.csprojResolveAssemblyReference.cache
 D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.TagHelpers.input.cache
 D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.TagHelpers.output.cache
 D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.RazorCoreGenerate.cache
@@ -100,3 +99,4 @@ D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.RazorTargetAssemblyInfo.cache
 D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.RazorTargetAssemblyInfo.cs
 D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.Views.pdb
 D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.csproj.CopyComplete
+D:\Dialogue\obj\Debug\netcoreapp2.1\Dialogue.csprojResolveAssemblyReference.cache
