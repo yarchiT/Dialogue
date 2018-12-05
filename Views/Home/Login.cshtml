@@ -1,0 +1,47 @@
+@model UserLoginViewModel
+
+    <div class="container">
+      <div class="row">
+        <h3 style="text-align: center;">Login Form</h3>
+        <div class="col-md-5 col-md-offset-4">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form asp-controller="Home" asp-action="Login" method="post">
+                  Username:  <input asp-for="UserName" /> <br />
+                   <span asp-validation-for="UserName" class="text-danger"></span><br/>
+                  Password: <input asp-for="PasswordString" /><br />
+                  <span asp-validation-for="PasswordString" class="text-danger"></span><br/>
+                  <button type="submit" class="btn btn-default">Login</button>
+              </form>
+                <!-- <form asp-controller="Home" method="post">
+                    <div class="form-group">
+                        Username:
+                         <input type="Username" data-val="true"
+                                data-val-email="The Username field is not a valid email address."
+                                data-val-required="The Username field is required."
+                                id="username" name="username" value="" /><br>
+                          <span class="text-danger field-validation-valid"
+                          data-valmsg-for="username" data-valmsg-replace="true"></span>
+
+                        <br/>
+                        Password:
+                        <input type="password" data-val="true"
+                        data-val-required="The Password field is required."
+                        name="password" /><br>
+                        <span class="text-danger field-validation-valid"
+                          data-valmsg-for="password" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-default" formaction="/Home/Login">Login</button> 
+                  
+                </form> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="@Url.Content("~/wwwroot/js/site.js")"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>

@@ -1,0 +1,46 @@
+@model string
+
+@if( Model != null){
+        <h2> Hi, @Model</h2>       
+       
+        <div class="col-xs-12 col-md-9 chat__body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul class="list-group chat__main">
+                        <table style="width:100%" id="chatTable">
+                            <tr>
+                                <th>Name</th>
+                                <th>Message</th> 
+                            </tr>
+                        </table>
+                    </ul>
+                </div>
+
+                <div class="chat__type__body">
+                    <div class="chat__type">
+                        <textarea id="msg_box" placeholder="Type your message" style="min-width: 200px;"></textarea>
+                        <button class="btn btn-primary" id="sendMessage">Send</button>
+                    </div>
+                </div>
+
+                <div class="chat__typing">
+                    <span id="typerDisplay"></span>
+                </div>
+            </div>
+        </div>
+    
+    }
+    else
+    {
+        <div>
+            <h3>
+                Hey, Welcome to the Dialogue Web App. <br>
+                You are probably Vova z pid Lvova - check it out.
+            </h3>
+            <h4>
+                Psss, you need to login or register first.
+            </h4>
+        </div>
+    }
+    
+<script src="@Url.Content("~/Content/app.js")"></script>

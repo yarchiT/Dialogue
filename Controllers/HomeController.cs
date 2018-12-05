@@ -13,46 +13,60 @@ namespace Dialogue.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        [HttpGet]
+        public IActionResult Index()
         {
-            if(HttpContext.Session.GetString("useName") != null){
-                 return View("~/Views/Chat.cshtml");
-            }else{
-                return View("~/Views/Login.cshtml");
-            }
+           var username = HttpContext.Session.GetString("LoggedUserName");
+           return View("Index", username);
         }
 
         [HttpGet]
-		public ActionResult Login()
+		public IActionResult Login()
 		{
-            return Index();
+            UserLoginViewModel user = new UserLoginViewModel();
+            return View("Login", user);
         }
 
         [HttpPost]
-		public async Task<IActionResult> Login(string username, string password)
+        [ValidateAntiForgeryToken]
+		public async Task<IActionResult> Login( UserLoginViewModel user)
 		{
-            
-            
-		    var res = await ServiceConnector.Login(username, password);
-            if (res is OkResult)
+            if (ModelState.IsValid)
             {
-                ViewBag.CurrentUserName = username;
-                HttpContext.Session.SetString("useName", username);
+                var res = await ServiceConnector.Login(user.UserName, user.PasswordString);
+                if (res is OkResult)
+                {
+                    HttpContext.Session.SetString("LoggedUserName", user.UserName);
+                    return Index();
+                }
+                return View(user);
             }
-            return Index();
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(user);
+            }
+		    
+            return View(user);
+        }
+
+        [HttpGet]
+		public ActionResult Register()
+		{
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string username, string password)
-        {
-            
-            var res = await ServiceConnector.Register(username, password);
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register( UserLoginViewModel user)
+        { 
+            var res = await ServiceConnector.Register(user.UserName, user.PasswordString);
             if (res is OkResult)
             {
-                ViewBag.CurrentUserName = username;
-                HttpContext.Session.SetString("useName", username);
+                HttpContext.Session.SetString("LoggedUserName", user.UserName);
+                return Index();
             }
-            return Index();
+            return View();
         }
 
 
