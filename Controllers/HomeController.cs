@@ -24,12 +24,12 @@ namespace Dialogue.Controllers
 		public IActionResult Login()
 		{
             UserLoginViewModel user = new UserLoginViewModel();
-            return View("Login", user);
+            return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login( UserLoginViewModel user)
+		public async Task<IActionResult> Login(UserLoginViewModel user)
 		{
             if (ModelState.IsValid)
             {
@@ -37,36 +37,46 @@ namespace Dialogue.Controllers
                 if (res is OkResult)
                 {
                     HttpContext.Session.SetString("LoggedUserName", user.UserName);
-                    return Index();
+                    return RedirectToAction("Index");
+                }else if(res is NotFoundResult)
+                {
+                    ModelState.AddModelError(string.Empty, "Incorrect username or password");
                 }
                 return View(user);
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return View(user);
-            }
-		    
+
+		    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(user);
         }
 
         [HttpGet]
 		public ActionResult Register()
 		{
-            return View();
+            UserRegisterViewModel user = new UserRegisterViewModel();
+            return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register( UserLoginViewModel user)
+        public async Task<IActionResult> Register( UserRegisterViewModel user)
         { 
-            var res = await ServiceConnector.Register(user.UserName, user.PasswordString);
-            if (res is OkResult)
+            if (ModelState.IsValid)
             {
-                HttpContext.Session.SetString("LoggedUserName", user.UserName);
-                return Index();
+                var res = await ServiceConnector.Register(user.UserName, user.PasswordString);
+                if (res is OkResult)
+                {
+                    HttpContext.Session.SetString("LoggedUserName", user.UserName);
+                    return RedirectToAction("Index");
+                }else
+                {
+                    ModelState.AddModelError(string.Empty, "User with with these credentials already exist.");
+                    return View(user);
+                }
             }
-            return View();
+            
+            ModelState.AddModelError(string.Empty, "Invalid register attempt.");
+           
+            return View(user);
         }
 
 

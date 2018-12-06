@@ -23,7 +23,7 @@ namespace Dialogue.Web.Controllers
         }
 
         [Route(""), HttpPost]
-        public IActionResult AddUser([FromBody] UserDto userDto)
+        public IActionResult AddUser([FromBody] RegisterUserDto userDto)
         {
             User user = _db.Users.FirstOrDefault(u => u.UserName == userDto.UserName);
 
@@ -32,10 +32,12 @@ namespace Dialogue.Web.Controllers
 
             User newUser = new User
             {
-                UserName = userDto.UserName
+                UserName = userDto.UserName,
+                FirstName = userDto.FirstName,
+                LastName = userDto.LastName
             };
 
-            string hashedPassword = _passwordHasher.HashPassword(newUser, userDto.Password);
+            string hashedPassword = _passwordHasher.HashPassword(newUser, userDto.PasswordString);
             newUser.Password = hashedPassword;
 
             _db.Users.Add(newUser);
@@ -53,9 +55,9 @@ namespace Dialogue.Web.Controllers
              if (user == null)
                 return NotFound();
 
-            var result = _passwordHasher.VerifyHashedPassword(user, user.Password, userDto.Password);
+            var result = _passwordHasher.VerifyHashedPassword(user, user.Password, userDto.PasswordString);
             if(result == PasswordVerificationResult.Success)
-                 return Ok();
+                return Ok();
             
             return BadRequest("Password doesn't match");
         }
@@ -67,6 +69,17 @@ namespace Dialogue.Web.Controllers
     {
         public string UserName { get; set; }
 
-        public string Password { get; set; }
+        public string PasswordString { get; set; }
+    }
+
+    public class RegisterUserDto
+    {
+        public string UserName { get; set; }
+
+        public string PasswordString { get; set; }
+
+        public string FirstName {get; set; }
+
+        public string LastName {get; set; }
     }
 }

@@ -39,6 +39,10 @@ namespace Dialogue.Web.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
                     b.Property<string>("Password");
 
                     b.Property<string>("UserName");

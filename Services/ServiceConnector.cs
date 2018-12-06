@@ -27,31 +27,29 @@ namespace Dialogue.Services
 
         public static async Task<IActionResult> Login(string username, string password)
         {
-            IActionResult res = null;
-            var json = JsonConvert.SerializeObject(new {userName = username, password = password});
+            var json = JsonConvert.SerializeObject(new {userName = username, passwordString = password});
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync("http://localhost:58707/api/users/login", stringContent);// URRIIIII
             if (response.IsSuccessStatusCode)
             {
-                res = new OkResult();//await response.Content.ReadAsAsync<IActionResult>();
+                return new OkResult();//await response.Content.ReadAsAsync<IActionResult>();
             }
             else{
-                res = new NotFoundResult();
+                return new NotFoundResult();
             }
-            return res;
+            return new BadRequestResult();
         }
 
         public static async Task<IActionResult> Register(string username, string password)
         {
-            ActionResult res = null;
-            var json = JsonConvert.SerializeObject(new { userName = username, password = password });
+            var json = JsonConvert.SerializeObject(new { userName = username, passwordString = password });
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync("http://localhost:58707/api/users", stringContent);// URRIIIII
             if (response.IsSuccessStatusCode)
             {
-                res = new OkResult();//await response.Content.ReadAsAsync<ActionResult>();
+                return new OkResult();//await response.Content.ReadAsAsync<ActionResult>();
             }
-            return res;
+            return new BadRequestResult();
         }
 
         
