@@ -12,14 +12,14 @@ namespace Dialogue.Controllers
             _chatService = chatService;
         }
 
-         [HttpPost]
+        [HttpPost]
 		public JsonResult HandleMessage(string message)
 		{
             var response = _chatService.responseToMessage(message);   
             return Json(new {result = response});
         }
 
-         [HttpGet]
+        [HttpGet]
 		public JsonResult Handle(string message)
 		{
             return Json(new {result = "Recieved " + message});
