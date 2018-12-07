@@ -1,4 +1,6 @@
 
+using Dialogue.Web.Models;
+
 namespace Dialogue.Models
 {
    public class MessageDto

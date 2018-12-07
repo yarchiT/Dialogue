@@ -13,7 +13,7 @@
         success: function(data) {
             userModule.displayMessage("Siri", data.result);
             $(".loader").css('display', 'none');
-            $("body").css('background-color', 'white')
+            $("body").css('background-color', 'white');
             $("#msg_box").val("");
         },
         error: function(data){
@@ -24,8 +24,8 @@
 
   var userModule = (function(){
 
-    function displayMessage(speaker, message){
-        var messageHtml = "<tr><td>" + speaker + "</td><td>" + message + "</td></tr>"
+    function displayMessage(speaker, message) {
+        var messageHtml = "<tr><td>" + speaker + "</td><td>" + message + "</td></tr>";
         $('#chatTable tr:last').after(messageHtml);
       }
 

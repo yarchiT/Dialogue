@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Dialogue.Models;
 using System.Web;
 using Dialogue.Services;
+using Dialogue.Web.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace Dialogue.Controllers
@@ -14,10 +15,12 @@ namespace Dialogue.Controllers
     public class HomeController : Controller
     {
         [HttpGet]
-        public IActionResult Index()
+        public async  Task<IActionResult> Index()
         {
            var username = HttpContext.Session.GetString("LoggedUserName");
-           return View("Index", username);
+            List<Message> chat = await ServiceConnector.GetChatHistory(username);
+
+            return View("Index", new ChatPageViewModel() { UserName = username, ChatHistory = chat });
         }
 
         [HttpGet]
@@ -37,6 +40,7 @@ namespace Dialogue.Controllers
                 if (res is OkResult)
                 {
                     HttpContext.Session.SetString("LoggedUserName", user.UserName);
+
                     return RedirectToAction("Index");
                 }else if(res is NotFoundResult)
                 {

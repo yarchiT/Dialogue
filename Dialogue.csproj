@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="Dialogue.Web\Dialogue.Web.csproj" />
+  </ItemGroup>
+
 </Project>

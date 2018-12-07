@@ -1,17 +1,28 @@
-@model string
+@model ChatPageViewModel
 
-@if( Model != null){
-        <h2> Hi, @Model</h2>       
+@if( !string.IsNullOrEmpty(Model.UserName)){
+        <h2> Hi, @Model.UserName</h2>       
        
         <div class="col-xs-12 col-md-9 chat__body">
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="list-group chat__main">
-                        <table style="width:100%" id="chatTable">
+                        <table style="width: 100%" id="chatTable">
                             <tr>
                                 <th>Name</th>
-                                <th>Message</th> 
+                                <th>Message</th>
                             </tr>
+                            @foreach (var chatRow in Model.ChatHistory)
+                            {
+                                var author = AuthorId.Siri.ToString().Equals(chatRow.Author) ? chatRow.Author.ToString() : "You";
+                                <tr>
+                                    <td>
+                                        @author
+                                    </td>
+                                    <td>@chatRow.Text</td>
+                                </tr>
+                            }
+
                         </table>
                     </ul>
                 </div>

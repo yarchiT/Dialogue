@@ -1,4 +1,7 @@
+using System.Threading.Tasks;
+using Dialogue.Models;
 using Dialogue.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dialogue.Controllers
@@ -13,10 +16,25 @@ namespace Dialogue.Controllers
         }
 
         [HttpPost]
-		public JsonResult HandleMessage(string message)
+		public async Task<JsonResult> HandleMessage(string message)
 		{
-            var response = _chatService.responseToMessage(message);   
-            return Json(new {result = response});
+		    var username = HttpContext.Session.GetString("LoggedUserName");
+            var res = await ServiceConnector.AddMessage(username, new MessageDto(){Author = AuthorId.User, Text = message});
+		    string response;
+
+            if (res is OkResult)
+		    {
+		        response = _chatService.responseToMessage(message);
+                var responseForSiri = await ServiceConnector.AddMessage(username, new MessageDto() { Author = AuthorId.Siri, Text = response });
+		        if (responseForSiri is OkResult)
+		        {
+		            return Json(new { result = response });
+                }
+		        return Json(new { result = "Siri is in break mode. Try to be more polite!" });
+            }
+
+		   
+            return Json(new {result = "Sorry, we can't handle your message!"});
         }
 
         [HttpGet]

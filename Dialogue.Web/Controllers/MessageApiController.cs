@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialogue.Models;
 
 namespace Dialogue.Web.Controllers
 {
@@ -56,9 +57,5 @@ namespace Dialogue.Web.Controllers
 
     }
 
-    public class MessageDto
-    {
-        public string Text { get; set; }
-        public AuthorId Author { get; set; }
-    }
+   
 }

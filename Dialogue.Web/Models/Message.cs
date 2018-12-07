@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Dialogue.Models;
 namespace Dialogue.Web.Models
 {
     public class Message
@@ -14,9 +14,5 @@ namespace Dialogue.Web.Models
 
         public string Text { get; set; }
     }
-
-    public enum AuthorId{
-        User = 0,
-        Siri = 1
-    }
+    
 }
