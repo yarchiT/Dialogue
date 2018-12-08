@@ -15,16 +15,27 @@ namespace Dialogue.Controllers
     public class HomeController : Controller
     {
         [HttpGet]
-        public async  Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
+            var username = HttpContext.Session.GetString("LoggedUserName");
+            if(!string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Dialogue");
+            }
+            return View("Index");
+        }
+
+        [HttpGet]
+		public async Task<IActionResult> Dialogue()
+		{   
             var username = HttpContext.Session.GetString("LoggedUserName");
             (List<Message> chat, bool serviceIsRunning) = await ServiceConnector.GetChatHistory(username);
             if (serviceIsRunning)
             {
-                return View("Index", new ChatPageViewModel() {UserName = username, ChatHistory = chat});
+                return View("Dialogue", new ChatPageViewModel() {UserName = username, ChatHistory = chat});
             }
 
-            return Content("Please, turn on Dialogue Web Service");
+            return Content("Please, turn on your Dialogue Web Service");
         }
 
         [HttpGet]
@@ -47,7 +58,7 @@ namespace Dialogue.Controllers
                     {
                         HttpContext.Session.SetString("LoggedUserName", user.UserName);
 
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Dialogue");
                     }
                     else if (res is NotFoundResult)
                     {
@@ -76,13 +87,13 @@ namespace Dialogue.Controllers
         { 
             if (ModelState.IsValid)
             {
-                (IActionResult res, bool serviceIsRunning) = await ServiceConnector.Register(user.UserName, user.PasswordString);
+                (IActionResult res, bool serviceIsRunning) = await ServiceConnector.Register(user);
                 if (serviceIsRunning)
                 {
                     if (res is OkResult)
                     {
                         HttpContext.Session.SetString("LoggedUserName", user.UserName);
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Dialogue");
                     }
                     else
                     {
@@ -90,6 +101,7 @@ namespace Dialogue.Controllers
                         return View(user);
                     }
                 }
+
                 return Content("Please, turn on your Dialogue Web Service");
             }
             

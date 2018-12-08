@@ -39,9 +39,9 @@ namespace Dialogue.Services
             return (new BadRequestResult(),serviceIsRunning);
         }
 
-        public static async Task<(IActionResult, bool)> Register(string username, string password)
+        public static async Task<(IActionResult, bool)> Register(UserRegisterViewModel user)
         {
-            var json = JsonConvert.SerializeObject(new { userName = username, passwordString = password });
+            var json = JsonConvert.SerializeObject(user);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
             bool serviceIsRunning = true;
             try
@@ -57,9 +57,7 @@ namespace Dialogue.Services
             {
                 serviceIsRunning = false;
                 return (new BadRequestResult(), serviceIsRunning);
-            }
-           
-            
+            }  
         }
 
         public static async Task<(IActionResult, bool)> AddMessage(string username, MessageDto message)

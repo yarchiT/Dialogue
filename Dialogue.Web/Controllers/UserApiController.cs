@@ -33,6 +33,7 @@ namespace Dialogue.Web.Controllers
             User newUser = new User
             {
                 UserName = userDto.UserName,
+                Email = userDto.Email,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName
             };
@@ -75,6 +76,8 @@ namespace Dialogue.Web.Controllers
     public class RegisterUserDto
     {
         public string UserName { get; set; }
+
+        public string Email { get; set; }
 
         public string PasswordString { get; set; }
 

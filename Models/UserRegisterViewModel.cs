@@ -13,6 +13,10 @@ namespace Dialogue.Models
         [Required]
         public string UserName { get; set; }
 
+        [DataType(DataType.EmailAddress)]
+        [Required]
+        public string Email { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         public string PasswordString { get; set; }
