@@ -1,5 +1,8 @@
 ﻿$( "#sendMessage").click(function() {
     var message = $("#msg_box").val();
+    if(message === "")
+        return;
+
     userModule.displayMessage("You", message);
     $(".loader").css('display', 'block');
     $("body").css('background-color', 'aliceblue')

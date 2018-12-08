@@ -62,7 +62,7 @@ namespace Dialogue.Services
 
         public static async Task<(IActionResult, bool)> AddMessage(string username, MessageDto message)
         {
-            var json = JsonConvert.SerializeObject(new { userName = username, messageDto = message});
+            var json = JsonConvert.SerializeObject(message);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
             bool serviceIsRunning = true;
             try

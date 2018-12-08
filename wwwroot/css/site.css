@@ -28,6 +28,13 @@ body {
     margin: 15px;
 }
 
+/* used for User messageses*/
+.author0{
+    background-color: #22c757;
+}
+
+
+
 .loader {
     border: 16px solid #f3f3f3; /* Light grey */
     border-top: 16px solid #3498db; /* Blue */

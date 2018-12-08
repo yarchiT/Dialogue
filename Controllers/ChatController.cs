@@ -22,22 +22,20 @@ namespace Dialogue.Controllers
 		    (IActionResult res, bool serviceIsRunning) = await ServiceConnector.AddMessage(username, new MessageDto(){Author = AuthorId.User, Text = message});
 		    if (serviceIsRunning)
 		    {
-		        string response;
-
 		        if (res is OkResult)
 		        {
-		            response = _chatService.responseToMessage(message);
-		            var responseForSiri = await ServiceConnector.AddMessage(username,
+		            string response = _chatService.responseToMessage(message);
+		            (IActionResult responseFromSiri, bool serviceIsOk) = await ServiceConnector.AddMessage(username,
 		                new MessageDto() {Author = AuthorId.Siri, Text = response});
-		            if (responseForSiri is OkResult)
+		            
+					if (responseFromSiri is OkResult)
 		            {
 		                return Json(new {result = response});
 		            }
 
 		            return Json(new {result = "Siri is in break mode. Try to be more polite!"});
 		        }
-
-
+				
 		        return Json(new {result = "Sorry, we can't handle your message!"});
 		    }
 		    return Json(new {result = "Please, turn on your Dialogue Web Service"} );

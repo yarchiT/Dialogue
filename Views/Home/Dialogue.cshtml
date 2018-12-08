@@ -15,13 +15,17 @@
                             </tr>
                             @foreach (var chatRow in Model.ChatHistory)
                             {
-                                var author = AuthorId.Siri.ToString().Equals(chatRow.Author) ? chatRow.Author.ToString() : "You";
-                                <tr>
-                                    <td>
-                                        @author
-                                    </td>
-                                    <td>@chatRow.Text</td>
-                                </tr>
+                                if(@chatRow.Text != null)
+                                {
+                                    var author = AuthorId.Siri.Equals(chatRow.Author) ? chatRow.Author.ToString() : "You";
+                                    var authorClass = "author"+ (int)chatRow.Author;
+                                    <tr class="@authorClass">
+                                        <td>
+                                            @author
+                                        </td>
+                                        <td>@chatRow.Text</td>
+                                    </tr>
+                                }
                             }
 
                         </table>
