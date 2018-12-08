@@ -17,10 +17,14 @@ namespace Dialogue.Controllers
         [HttpGet]
         public async  Task<IActionResult> Index()
         {
-           var username = HttpContext.Session.GetString("LoggedUserName");
-            List<Message> chat = await ServiceConnector.GetChatHistory(username);
+            var username = HttpContext.Session.GetString("LoggedUserName");
+            (List<Message> chat, bool serviceIsRunning) = await ServiceConnector.GetChatHistory(username);
+            if (serviceIsRunning)
+            {
+                return View("Index", new ChatPageViewModel() {UserName = username, ChatHistory = chat});
+            }
 
-            return View("Index", new ChatPageViewModel() { UserName = username, ChatHistory = chat });
+            return Content("Please, turn on Dialogue Web Service");
         }
 
         [HttpGet]
@@ -36,17 +40,23 @@ namespace Dialogue.Controllers
 		{
             if (ModelState.IsValid)
             {
-                var res = await ServiceConnector.Login(user.UserName, user.PasswordString);
-                if (res is OkResult)
+                (IActionResult res, bool serviceIsRunning) = await ServiceConnector.Login(user.UserName, user.PasswordString);
+                if (serviceIsRunning)
                 {
-                    HttpContext.Session.SetString("LoggedUserName", user.UserName);
+                    if (res is OkResult)
+                    {
+                        HttpContext.Session.SetString("LoggedUserName", user.UserName);
 
-                    return RedirectToAction("Index");
-                }else if(res is NotFoundResult)
-                {
-                    ModelState.AddModelError(string.Empty, "Incorrect username or password");
+                        return RedirectToAction("Index");
+                    }
+                    else if (res is NotFoundResult)
+                    {
+                        ModelState.AddModelError(string.Empty, "Incorrect username or password");
+                    }
+
+                    return View(user);
                 }
-                return View(user);
+                return Content("Please, turn on your Dialogue Web Service");
             }
 
 		    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -66,16 +76,21 @@ namespace Dialogue.Controllers
         { 
             if (ModelState.IsValid)
             {
-                var res = await ServiceConnector.Register(user.UserName, user.PasswordString);
-                if (res is OkResult)
+                (IActionResult res, bool serviceIsRunning) = await ServiceConnector.Register(user.UserName, user.PasswordString);
+                if (serviceIsRunning)
                 {
-                    HttpContext.Session.SetString("LoggedUserName", user.UserName);
-                    return RedirectToAction("Index");
-                }else
-                {
-                    ModelState.AddModelError(string.Empty, "User with with these credentials already exist.");
-                    return View(user);
+                    if (res is OkResult)
+                    {
+                        HttpContext.Session.SetString("LoggedUserName", user.UserName);
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "User with with these credentials already exist.");
+                        return View(user);
+                    }
                 }
+                return Content("Please, turn on your Dialogue Web Service");
             }
             
             ModelState.AddModelError(string.Empty, "Invalid register attempt.");

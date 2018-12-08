@@ -19,22 +19,28 @@ namespace Dialogue.Controllers
 		public async Task<JsonResult> HandleMessage(string message)
 		{
 		    var username = HttpContext.Session.GetString("LoggedUserName");
-            var res = await ServiceConnector.AddMessage(username, new MessageDto(){Author = AuthorId.User, Text = message});
-		    string response;
-
-            if (res is OkResult)
+		    (IActionResult res, bool serviceIsRunning) = await ServiceConnector.AddMessage(username, new MessageDto(){Author = AuthorId.User, Text = message});
+		    if (serviceIsRunning)
 		    {
-		        response = _chatService.responseToMessage(message);
-                var responseForSiri = await ServiceConnector.AddMessage(username, new MessageDto() { Author = AuthorId.Siri, Text = response });
-		        if (responseForSiri is OkResult)
-		        {
-		            return Json(new { result = response });
-                }
-		        return Json(new { result = "Siri is in break mode. Try to be more polite!" });
-            }
+		        string response;
 
-		   
-            return Json(new {result = "Sorry, we can't handle your message!"});
+		        if (res is OkResult)
+		        {
+		            response = _chatService.responseToMessage(message);
+		            var responseForSiri = await ServiceConnector.AddMessage(username,
+		                new MessageDto() {Author = AuthorId.Siri, Text = response});
+		            if (responseForSiri is OkResult)
+		            {
+		                return Json(new {result = response});
+		            }
+
+		            return Json(new {result = "Siri is in break mode. Try to be more polite!"});
+		        }
+
+
+		        return Json(new {result = "Sorry, we can't handle your message!"});
+		    }
+		    return Json(new {result = "Please, turn on your Dialogue Web Service"} );
         }
 
         [HttpGet]
