@@ -5,32 +5,25 @@
         <h2> Hi, @Model.UserName</h2>       
        
         <div class="col-xs-12 col-md-9 chat__body">
-            <div class="row">
-                <div class="col-xs-12">
-                    <ul class="list-group chat__main">
-                        <table style="width: 100%" id="chatTable">
-                            <tr>
-                                <th>Name</th>
-                                <th>Message</th>
-                            </tr>
-                            @foreach (var chatRow in Model.ChatHistory)
-                            {
-                                if(@chatRow.Text != null)
-                                {
-                                    var author = AuthorId.Siri.Equals(chatRow.Author) ? chatRow.Author.ToString() : "You";
-                                    var authorClass = "author"+ (int)chatRow.Author;
-                                    <tr class="@authorClass">
-                                        <td>
-                                            @author
-                                        </td>
-                                        <td>@chatRow.Text</td>
-                                    </tr>
-                                }
-                            }
+            <div class="row" style="float: left;">
 
-                        </table>
-                    </ul>
-                </div>
+                 <ul class="ChatLog" id='ChatLog'>
+                     @foreach (var chatRow in Model.ChatHistory)
+                     {
+                         if(@chatRow.Text != null)
+                         {
+                             var messageAuthorClass = AuthorId.Siri.Equals(chatRow.Author) ?
+                                 "ChatLog__entry" : "ChatLog__entry ChatLog__entry_mine";
+                             <li class="@messageAuthorClass">
+                                 <img class="ChatLog__avatar" src="~/images/vovan.png" />
+                                 <p class="ChatLog__message">
+                                     @chatRow.Text
+                                 </p>
+                             </li>
+                 
+                         }
+                     }
+                 </ul>
 
                 <div class="chat__type__body">
                     <div class="chat__type">

@@ -3,7 +3,7 @@
     if(message === "")
         return;
 
-    userModule.displayMessage("You", message);
+    userModule.displayMessage("me", message);
     $(".loader").css('display', 'block');
     $("body").css('background-color', 'aliceblue')
 
@@ -14,7 +14,7 @@
             message: message
         },
         success: function(data) {
-            userModule.displayMessage("Siri", data.result);
+            userModule.displayMessage("siri", data.result);
             $(".loader").css('display', 'none');
             $("body").css('background-color', 'white');
             $("#msg_box").val("");
@@ -28,8 +28,17 @@
   var userModule = (function(){
 
     function displayMessage(speaker, message) {
-        var messageHtml = "<tr><td>" + speaker + "</td><td>" + message + "</td></tr>";
-        $('#chatTable tr:last').after(messageHtml);
+        var liNode = document.createElement('li');
+        liNode.className = speaker === "me" ? 'ChatLog__entry ChatLog__entry_mine' : 'ChatLog__entry';
+
+        var pNode = document.createElement('p');
+        pNode.className = 'ChatLog__message';
+        pNode.innerHTML = message;
+
+        liNode.appendChild(pNode);
+        document.getElementById('ChatLog').appendChild(liNode);
+
+        $('#ChatLog').scrollTop($('#ChatLog li:last-child').position().top);
       }
 
     return{

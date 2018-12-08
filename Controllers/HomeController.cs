@@ -9,11 +9,19 @@ using System.Web;
 using Dialogue.Services;
 using Dialogue.Web.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace Dialogue.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IOptions<MyConfig> _myConfig;
+
+        public HomeController(IOptions<MyConfig> myConfig)
+        {
+            _myConfig = myConfig;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -29,7 +37,8 @@ namespace Dialogue.Controllers
 		public async Task<IActionResult> Dialogue()
 		{   
             var username = HttpContext.Session.GetString("LoggedUserName");
-            (List<Message> chat, bool serviceIsRunning) = await ServiceConnector.GetChatHistory(username);
+            var serviceUrl = _myConfig;
+            (List<Message> chat, bool serviceIsRunning) = await ServiceConnector.GetChatHistory(username, _myConfig.Value.ServiceUrl);
             if (serviceIsRunning)
             {
                 return View("Dialogue", new ChatPageViewModel() {UserName = username, ChatHistory = chat});
@@ -51,7 +60,7 @@ namespace Dialogue.Controllers
 		{
             if (ModelState.IsValid)
             {
-                (IActionResult res, bool serviceIsRunning) = await ServiceConnector.Login(user.UserName, user.PasswordString);
+                (IActionResult res, bool serviceIsRunning) = await ServiceConnector.Login(user.UserName, user.PasswordString, _myConfig.Value.ServiceUrl);
                 if (serviceIsRunning)
                 {
                     if (res is OkResult)
@@ -87,7 +96,7 @@ namespace Dialogue.Controllers
         { 
             if (ModelState.IsValid)
             {
-                (IActionResult res, bool serviceIsRunning) = await ServiceConnector.Register(user);
+                (IActionResult res, bool serviceIsRunning) = await ServiceConnector.Register(user, _myConfig.Value.ServiceUrl);
                 if (serviceIsRunning)
                 {
                     if (res is OkResult)
